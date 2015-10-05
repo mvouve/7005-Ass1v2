@@ -5,7 +5,13 @@ import (
 	"net"
 )
 
+const defaultPort = ":7005"
+
 func startServer(port string) {
+	if port == "" {
+		port = defaultPort
+	}
+
 	ln, err := net.Listen("tcp", port)
 
 	if err != nil {
@@ -17,14 +23,6 @@ func startServer(port string) {
 		if err != nil {
 			log.Print(err)
 		}
-		go handleClient(conn)
-	}
-}
-
-func handleClient(conn net.Conn) {
-	for {
-		if receiveMessage(conn) != nil {
-			return
-		}
+		go receiveMessage(conn)
 	}
 }
