@@ -8,6 +8,24 @@ import (
 	"github.com/docopt/docopt-go"
 )
 
+/******************************************************************************************
+ * FUNCTION main
+ *
+ * DESIGNER: Marc Vouve
+ *
+ * PROGRAMMER: Marc Vouve
+ *
+ * DATE: Saturaday October 3rd
+ *
+ * REVISIONS: Sunday October 4th - simplified protocol
+ *
+ *
+ * PROTOTYPE: main()
+ *
+ * RETURNS
+ *
+ * NOTES: This function is the main driver for the program
+ * ***************************************************************************************/
 func main() {
 	usage := `
   Usage:
@@ -23,13 +41,33 @@ func main() {
 	}
 }
 
+/******************************************************************************************
+ * FUNCTION client(host string, file string, send bool)
+ *
+ * DESIGNER: Marc Vouve
+ *
+ * PROGRAMMER: Marc Vouve
+ *
+ * DATE: Saturaday October 3rd
+ *
+ * REVISIONS: Sunday October 4th - simplified protocol
+ *
+ * PROTOTYPE: client(host string, file string, send bool)
+ *										host - host and port in x.x.x.x:x format
+ *
+ * RETURNS
+ *
+ * NOTES: This function handles the clients flow of control
+ * ***************************************************************************************/
 func client(host string, file string, send bool) {
 	connect, err := net.Dial("tcp", host)
 	if err != nil {
 		log.Fatal(err)
 	}
 	if send {
-		sendFile(connect, file)
+		if sendFile(connect, file) != nil {
+			log.Fatalln("Could not open file")
+		}
 	} else {
 		requestFile(connect, file)
 		if receiveMessage(connect) != nil {

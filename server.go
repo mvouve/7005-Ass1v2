@@ -7,6 +7,26 @@ import (
 
 const defaultPort = ":7005"
 
+/******************************************************************************************
+ * FUNCTION startServer(port string)
+ *
+ * DESIGNER: Marc Vouve
+ *
+ * PROGRAMMER: Marc Vouve
+ *
+ * DATE: Saturaday October 3rd
+ *
+ * REVISIONS: None
+ *
+ *
+ * PROTOTYPE: startServer(port string)
+ *								port : the port to listen on (NEEDS : in invocation)
+ *
+ * RETURNS nil
+ *
+ * NOTES: This function listens for connections and relies on receive message to determine
+ * action
+ * ***************************************************************************************/
 func startServer(port string) {
 	if port == "" {
 		port = defaultPort
