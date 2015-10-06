@@ -41,6 +41,7 @@ const (
  * ***************************************************************************************/
 func sendFile(conn net.Conn, fn string) error {
 	buffer := make([]byte, packetSize, packetSize)
+
 	// if the server sent the name of the file, the string can be tainted by 0s that will prevent the file from opening, this splits them off the string
 	file, err := os.Open(strings.Trim(fn, string(0)))
 	if err != nil {
@@ -52,14 +53,12 @@ func sendFile(conn net.Conn, fn string) error {
 	copy(buffer[packetTypeSize:], []byte(fn))
 	conn.Write(buffer)
 
-	for {
-		_, err := file.Read(buffer)
-		if err != nil {
-			conn.Close()
-			return nil
-		}
-		conn.Write(buffer)
-	}
+	io.Copy(conn, file)
+
+	conn.Close()
+	file.Close()
+
+	return nil
 }
 
 /******************************************************************************************
@@ -86,15 +85,10 @@ func sendFile(conn net.Conn, fn string) error {
 func receiveFile(conn net.Conn, name string) {
 	file, _ := os.Create("recv/" + name[0:strings.IndexByte(name, 0)])
 	defer file.Close()
+	io.Copy(file, conn)
 
-	buffer := make([]byte, packetSize, packetSize)
-	for {
-		n, err := conn.Read(buffer)
-		if err != nil {
-			return
-		}
-		file.Write(buffer[:n])
-	}
+	conn.Close()
+	file.Close()
 }
 
 /******************************************************************************************

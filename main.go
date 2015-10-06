@@ -30,7 +30,7 @@ func main() {
 	usage := `
   Usage:
   stupid_ftp client <host> [(--GET | --SEND)] <FILE>
-  stupid_ftp server [<port>]`
+  stupid_ftp server <port>`
 
 	arguments, _ := docopt.Parse(usage, nil, true, "1.0.0", false)
 

@@ -5,8 +5,6 @@ import (
 	"net"
 )
 
-const defaultPort = ":7005"
-
 /******************************************************************************************
  * FUNCTION startServer(port string)
  *
@@ -28,16 +26,11 @@ const defaultPort = ":7005"
  * action
  * ***************************************************************************************/
 func startServer(port string) {
-	if port == "" {
-		port = defaultPort
-	}
 
 	ln, err := net.Listen("tcp", port)
-
 	if err != nil {
-		log.Print(err)
+		log.Fatal(err)
 	}
-
 	for {
 		conn, err := ln.Accept()
 		if err != nil {
